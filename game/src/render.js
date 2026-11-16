@@ -131,9 +131,25 @@ function flameTongue(ctx, x, baseY, width, height, sway, colour) {
 }
 
 function drawFlame(ctx, world) {
-  const size = Math.max(world.flame, 2);
   const x = FLAME.x;
   const y = FLAME.baseY - 2;
+  if (world.flame <= 0) {
+    // Dead: a smouldering bed of embers and one last wisp of smoke, no tongues.
+    ctx.fillStyle = 'rgba(255,90,40,0.16)';
+    ctx.beginPath();
+    ctx.ellipse(x, y, 40, 8, 0, 0, TAU);
+    ctx.fill();
+    ctx.fillStyle = '#ff7b2f';
+    for (const dx of [-22, -7, 11, 24]) {
+      ctx.globalAlpha = 0.5 + 0.3 * Math.sin(world.time * 2 + dx);
+      ctx.beginPath();
+      ctx.arc(x + dx, y - 1, 2.4, 0, TAU);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    return;
+  }
+  const size = Math.max(world.flame, 2);
   const height = 34 + size * 1.62;
   const width = 15 + size * 0.34;
   const flick = Math.sin(world.time * 9.3) * 3 + Math.sin(world.time * 23.7) * 1.6;
@@ -455,11 +471,12 @@ function drawTitle(ctx, world, best) {
   ctx.fillStyle = PALETTE.muted;
   ctx.fillText('Move — mouse or arrow keys      Light pulse — click or Space      Survive 5 phases to reach dawn', FIELD.width / 2, 416);
 
-  if (Math.sin(world.time * 3.2) > -0.25) {
-    ctx.font = `800 27px ${FONT}`;
-    ctx.fillStyle = PALETTE.emberCore;
-    ctx.fillText('CLICK OR PRESS ENTER TO BEGIN', FIELD.width / 2, 486);
-  }
+  // The prompt breathes rather than blinks, so it is visible in any still frame.
+  ctx.globalAlpha = 0.62 + 0.38 * Math.sin(world.time * 3.2);
+  ctx.font = `800 27px ${FONT}`;
+  ctx.fillStyle = PALETTE.emberCore;
+  ctx.fillText('CLICK OR PRESS ENTER TO BEGIN', FIELD.width / 2, 486);
+  ctx.globalAlpha = 1;
   if (best > 0) {
     ctx.font = `600 17px ${FONT}`;
     ctx.fillStyle = PALETTE.muted;
@@ -473,20 +490,27 @@ function drawEnd(ctx, world, best) {
   panel(ctx, FIELD.width / 2 - 300, 148, 600, 400);
 
   ctx.textAlign = 'center';
-  ctx.font = `900 58px ${FONT}`;
+  // Shrink the headline to fit the panel, whichever ending it names.
+  const headline = world.won ? 'DAWN BREAKS' : 'THE LIGHT WENT OUT';
+  let headSize = 58;
+  ctx.font = `900 ${headSize}px ${FONT}`;
+  while (ctx.measureText(headline).width > 540 && headSize > 30) {
+    headSize -= 2;
+    ctx.font = `900 ${headSize}px ${FONT}`;
+  }
   if (world.won) {
     ctx.save();
     ctx.shadowColor = 'rgba(255,170,60,0.85)';
     ctx.shadowBlur = 30;
     ctx.fillStyle = '#ffcf7d';
-    ctx.fillText('DAWN BREAKS', FIELD.width / 2, 238);
+    ctx.fillText(headline, FIELD.width / 2, 238);
     ctx.restore();
     ctx.font = `400 20px ${FONT}`;
     ctx.fillStyle = '#e8dcff';
     ctx.fillText('The valley wakes in your light, Keeper.', FIELD.width / 2, 276);
   } else {
     ctx.fillStyle = '#8f86b8';
-    ctx.fillText('THE LIGHT WENT OUT', FIELD.width / 2, 238);
+    ctx.fillText(headline, FIELD.width / 2, 238);
     ctx.font = `400 20px ${FONT}`;
     ctx.fillStyle = '#b6abd9';
     ctx.fillText('The moths inherit the valley — this time.', FIELD.width / 2, 276);
@@ -510,12 +534,12 @@ function drawEnd(ctx, world, best) {
     ctx.fillText(value, FIELD.width / 2 + 24, y);
   });
 
-  if (Math.sin(world.time * 3.2) > -0.25) {
-    ctx.textAlign = 'center';
-    ctx.font = `800 24px ${FONT}`;
-    ctx.fillStyle = PALETTE.emberCore;
-    ctx.fillText('CLICK OR PRESS R TO PLAY AGAIN', FIELD.width / 2, 516);
-  }
+  ctx.globalAlpha = 0.62 + 0.38 * Math.sin(world.time * 3.2);
+  ctx.textAlign = 'center';
+  ctx.font = `800 24px ${FONT}`;
+  ctx.fillStyle = PALETTE.emberCore;
+  ctx.fillText('CLICK OR PRESS R TO PLAY AGAIN', FIELD.width / 2, 516);
+  ctx.globalAlpha = 1;
 }
 
 /** Draw one whole frame: the valley, the play, then the screen that sits over it. */

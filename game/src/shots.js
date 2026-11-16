@@ -80,7 +80,7 @@ function run(world, pilot, seconds) {
 export function stageShot(name, world) {
   world.reset();
   if (name === 'play') {
-    run(world, skilledPilot, 41);
+    run(world, skilledPilot, 47);
     // End on a flourish: a fresh pulse, caught a few steps into its ring.
     if (!world.over && world.pulseTimer <= 0) {
       world.pulse();
