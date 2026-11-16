@@ -1,6 +1,6 @@
 [![best-game-01](https://make.fun/badge/best-game-01.svg)](https://make.fun/bounty/best-game-01)
-[![rank](https://make.fun/badge/best-game-01/<owner>/<repo>/rank.svg)](https://make.fun/bounty/best-game-01)
-[![reward](https://make.fun/badge/best-game-01/<owner>/<repo>/reward.svg)](https://make.fun/bounty/best-game-01)
+[![rank](https://make.fun/badge/best-game-01/didinska21/emberfall/rank.svg)](https://make.fun/bounty/best-game-01)
+[![reward](https://make.fun/badge/best-game-01/didinska21/emberfall/reward.svg)](https://make.fun/bounty/best-game-01)
 
 # EMBERFALL — Keeper of the Last Light
 
