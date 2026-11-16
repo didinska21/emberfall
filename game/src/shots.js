@@ -98,5 +98,12 @@ export function stageShot(name, world) {
   }
   // Title: a few seconds of gentle, unattended valley behind the logo.
   run(world, skilledPilot, 5);
+  // Let any score floater the tending raised drift away before the frame
+  // freezes (the same settle the end screens use in main.js): caught mid-life
+  // it would hang behind the breathing prompt and ghost its letters.
+  while (world.floaters.some((f) => f.active)) {
+    world.time += STEP;
+    world.stepParticles();
+  }
   return SCREEN_TITLE;
 }
