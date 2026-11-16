@@ -53,6 +53,13 @@ The scenes in `shots.json` are staged by playing the real rules forward from a
 seed with a built-in pilot, so every screenshot is an honest frame of the game.
 Serve `game/`, open `index.html` with the listed query, and capture at 1280×720.
 
+## Competition
+
+An entry for the make.fun bounty
+[best-game-01](https://make.fun/bounty/best-game-01) ("Make the best game").
+Play it by serving `game/` and opening `index.html` in a desktop browser —
+no build step, no network, just static files.
+
 ## License
 
 MIT — see `LICENSE`.
